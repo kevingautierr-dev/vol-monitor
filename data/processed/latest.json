@@ -1,0 +1,53 @@
+{
+  "generated_utc": "2026-10-05T15:31+00:00",
+  "pairs": {
+    "SPX": {
+      "available": true,
+      "label": "S&P 500 / VIX",
+      "rv_choice_reason": "40% of opens equal the prior close: range/overnight estimators unreliable, using close-to-close",
+      "rv_col": "cc_21",
+      "term_filter": true,
+      "latest": {
+        "date": "2026-10-02",
+        "iv": 15.31,
+        "rv": 10.72,
+        "rv_estimator": "cc_21",
+        "spread_vol_pts": 4.59,
+        "ratio": 1.43,
+        "spread_z": -0.25,
+        "iv_rank_1y": 10.5,
+        "iv_pct_1y": 14.3,
+        "signal": 0,
+        "signal_label": "Neutre",
+        "term_filter": true,
+        "ts_slope_vol_pts": 2.7,
+        "curve": "contango"
+      }
+    },
+    "NDX": {
+      "available": true,
+      "label": "Nasdaq-100 / VXN",
+      "rv_choice_reason": "30% of opens equal the prior close: range/overnight estimators unreliable, using close-to-close",
+      "rv_col": "cc_21",
+      "term_filter": false,
+      "latest": {
+        "date": "2026-10-02",
+        "iv": 21.2,
+        "rv": 15.16,
+        "rv_estimator": "cc_21",
+        "spread_vol_pts": 6.04,
+        "ratio": 1.4,
+        "spread_z": 0.28,
+        "iv_rank_1y": 24.5,
+        "iv_pct_1y": 24.2,
+        "signal": 0,
+        "signal_label": "Neutre",
+        "term_filter": false
+      }
+    },
+    "SX5E": {
+      "available": false,
+      "reason": "missing data"
+    }
+  }
+}
