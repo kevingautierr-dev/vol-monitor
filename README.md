@@ -62,6 +62,27 @@ Parkinson / Garman-Klass sit ~2 pts below close-to-close because they ignore the
 
 Interactive version of the study: `docs/study_spx_1999_2018.html`.
 
+### Full rule on live Yahoo data (2006–2026, z-score + VIX3M contango filter)
+
+First production run, 5 Oct 2026. Same trade, same cost; sample starts with VIX3M (July 2006)
+and therefore includes 2008, 2020 and every later stress episode.
+
+| | Always sell | Sell only when "rich" |
+|---|---|---|
+| Monthly trades | 242 | 19 |
+| P&L per trade (vol pts) | +0.9 | +3.4 |
+| Worst daily-entry trade | **−253** (March 2020) | **−13** |
+| Max drawdown (monthly roll) | −220 | −7 |
+| Annualised Sharpe | 0.19 | 0.64 |
+
+- "Rich" days add **+1.6 pts** over neutral days (Newey-West t = 1.9): same sign and size
+  as the offline study, still short of 5 % significance.
+- With the backwardation filter the "cheap" leg now has the expected sign (−4.4 pts), but
+  it rests on 153 days clustered in a handful of episodes (t = −0.8) and flips sign in
+  several sub-periods: **not a usable signal**.
+- `^V2TX` (VSTOXX) returns no data on Yahoo, so implied vol for Europe is not covered;
+  Euro Stoxx 50 realised vol is still computed. Scope: S&P 500 and Nasdaq-100.
+
 ## Methodology
 
 **Realised vol** (`estimators.py`), annualised with 252 days, rolling 10 / 21 / 63 days,
