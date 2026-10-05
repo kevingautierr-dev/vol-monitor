@@ -1,0 +1,54 @@
+name: daily-vol-snapshot
+
+on:
+  schedule:
+    # 19:20 UTC Mon-Fri = 15:20 New York in summer, 14:20 in winter:
+    # inside the session, so option bid/ask are live (Yahoo often returns 0/0 quotes after the close).
+    - cron: "20 19 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      check_sources:
+        description: "Also run the source availability check"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write      # commit the new snapshot + dashboard
+
+concurrency:
+  group: daily-vol
+  cancel-in-progress: false
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install
+        run: pip install -r requirements.txt
+
+      - name: Tests
+        run: pytest -q
+
+      - name: Source check
+        if: ${{ inputs.check_sources }}
+        run: python scripts/check_sources.py
+
+      - name: Daily run (history, option chains, monitors, dashboard)
+        run: python scripts/daily.py
+
+      - name: Commit data and dashboard
+        run: |
+          git config user.name  "vol-monitor-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data docs
+          git diff --cached --quiet && echo "nothing to commit" && exit 0
+          git commit -m "snapshot $(date -u +%F)"
+          git push

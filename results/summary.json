@@ -1,0 +1,22 @@
+{
+  "sample": [
+    "1999-01-04",
+    "2018-12-31"
+  ],
+  "rv_estimator": "cc_21",
+  "rv_reason": "40% of opens equal the prior close: range/overnight estimators unreliable, using close-to-close",
+  "mean_iv": 19.937288270377735,
+  "mean_rv": 16.35966986132998,
+  "vrp_vol_mean_pts": 3.6444392309448586,
+  "vrp_positive_share": 0.8376921541225794,
+  "vrp_var_mean": 0.010523495094184458,
+  "excess_regression": {
+    "const_neutral": 1.8400898691514884,
+    "rich_excess": 1.0643824224187326,
+    "cheap_excess": -0.7089022232768153,
+    "t_const": 4.37024471001442,
+    "t_rich": 1.8507554817738334,
+    "t_cheap": -0.6721141269151041,
+    "n": 4863.0
+  }
+}
