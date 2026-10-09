@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-10-08T19:36+00:00",
+  "generated_utc": "2026-10-09T19:36+00:00",
   "pairs": {
     "SPX": {
       "available": true,
@@ -8,19 +8,19 @@
       "rv_col": "cc_21",
       "term_filter": true,
       "latest": {
-        "date": "2026-10-07",
-        "iv": 15.08,
-        "rv": 10.19,
+        "date": "2026-10-08",
+        "iv": 15.41,
+        "rv": 10.18,
         "rv_estimator": "cc_21",
-        "spread_vol_pts": 4.89,
-        "ratio": 1.48,
-        "spread_z": -0.15,
-        "iv_rank_1y": 9.2,
-        "iv_pct_1y": 11.5,
+        "spread_vol_pts": 5.23,
+        "ratio": 1.51,
+        "spread_z": -0.05,
+        "iv_rank_1y": 11.0,
+        "iv_pct_1y": 16.7,
         "signal": 0,
         "signal_label": "Neutre",
         "term_filter": true,
-        "ts_slope_vol_pts": 2.64,
+        "ts_slope_vol_pts": 2.67,
         "curve": "contango"
       }
     },
@@ -31,15 +31,15 @@
       "rv_col": "cc_21",
       "term_filter": false,
       "latest": {
-        "date": "2026-10-07",
-        "iv": 21.0,
-        "rv": 15.03,
+        "date": "2026-10-08",
+        "iv": 21.98,
+        "rv": 16.01,
         "rv_estimator": "cc_21",
         "spread_vol_pts": 5.97,
-        "ratio": 1.4,
-        "spread_z": 0.29,
-        "iv_rank_1y": 23.3,
-        "iv_pct_1y": 21.4,
+        "ratio": 1.37,
+        "spread_z": 0.3,
+        "iv_rank_1y": 29.3,
+        "iv_pct_1y": 32.1,
         "signal": 0,
         "signal_label": "Neutre",
         "term_filter": false
