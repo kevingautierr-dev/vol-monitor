@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-11-07T21:46+00:00",
+  "generated_utc": "2026-11-07T21:51+00:00",
   "pairs": {
     "SPX": {
       "available": true,
@@ -46,8 +46,25 @@
       }
     },
     "SX5E": {
-      "available": false,
-      "reason": "missing data"
+      "available": true,
+      "label": "Euro Stoxx 50 / VSTOXX",
+      "rv_choice_reason": "open prices look genuine",
+      "rv_col": "yz_21",
+      "term_filter": false,
+      "latest": {
+        "date": "2026-11-06",
+        "iv": 21.28,
+        "rv": 12.81,
+        "rv_estimator": "yz_21",
+        "spread_vol_pts": 8.47,
+        "ratio": 1.66,
+        "spread_z": 0.72,
+        "iv_rank_1y": 34.9,
+        "iv_pct_1y": 76.6,
+        "signal": 0,
+        "signal_label": "Neutre",
+        "term_filter": false
+      }
     }
   }
 }
