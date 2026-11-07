@@ -1,0 +1,36 @@
+name: probe-vstoxx
+on:
+  push:
+    branches: [probe-vstoxx]
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: curl candidates
+        run: |
+          UA="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130 Safari/537.36"
+          for u in \
+            "https://www.stoxx.com/document/Indices/Current/HistoricalData/h_vstoxx.txt" \
+            "https://www.stoxx.com/document/Indices/Current/HistoricalData/h_v2tx.txt" \
+            "https://www.stoxx.com/download/historical_values/h_vstoxx.txt" \
+            "https://stoxx.com/document/Indices/Current/HistoricalData/h_vstoxx.txt" \
+            "https://stooq.com/q/d/l/?s=^v2x&i=d" \
+            "https://stooq.com/q/d/l/?s=^vstoxx&i=d" ; do
+            echo "=================== $u"
+            curl -sSL -A "$UA" -o out.txt -w "HTTP %{http_code} %{content_type} %{size_download}B final=%{url_effective}\n" "$u" || true
+            head -c 400 out.txt; echo; echo "..."; tail -c 300 out.txt; echo
+          done
+      - uses: actions/setup-python@v6
+        with: {python-version: "3.12"}
+      - name: yahoo symbols
+        run: |
+          pip -q install yfinance
+          python - <<'PY'
+          import yfinance as yf
+          for s in ["^V2TX","V2TX.DE","^VSTOXX","^V2X","^VSTX","V2X.DE","FVS=F","^STOXX50E"]:
+              try:
+                  h = yf.Ticker(s).history(period="1mo")
+                  print(s, "rows", len(h), (h.index.max(), round(h["Close"].iloc[-1],2)) if len(h) else "")
+              except Exception as e:
+                  print(s, "ERR", e)
+          PY
