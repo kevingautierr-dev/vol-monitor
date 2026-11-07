@@ -80,8 +80,8 @@ and therefore includes 2008, 2020 and every later stress episode.
 - With the backwardation filter the "cheap" leg now has the expected sign (−4.4 pts), but
   it rests on 153 days clustered in a handful of episodes (t = −0.8) and flips sign in
   several sub-periods: **not a usable signal**.
-- `^V2TX` (VSTOXX) returns no data on Yahoo, so implied vol for Europe is not covered;
-  Euro Stoxx 50 realised vol is still computed. Scope: S&P 500 and Nasdaq-100.
+- `^V2TX` (VSTOXX) returns no data on Yahoo; it is read instead from STOXX's official
+  end-of-day file (`h_v2tx.txt`, 1999 → today), so the Euro Stoxx 50 / VSTOXX line is live.
 
 ## Methodology
 
@@ -130,7 +130,7 @@ optimised, but the sub-period table shows the edge is not stable over time.
 | Need | Source | Status |
 |---|---|---|
 | VIX, VIX9D, VIX3M, VIX6M, VVIX, VXN | yfinance | daily |
-| VSTOXX (`^V2TX`) | yfinance | checked by `scripts/check_sources.py` — if missing or stale, the Europe line is dropped and flagged |
+| VSTOXX (`^V2TX`) | STOXX official file `h_v2tx.txt` (Yahoo serves nothing) | daily close; checked by `scripts/check_sources.py` — if missing or stale, the Europe line is dropped and flagged |
 | Index OHLC (S&P 500, Nasdaq-100, Euro Stoxx 50, CAC 40) | yfinance | daily, quality-checked |
 | Option chains SPY, QQQ | yfinance, snapshotted daily | free history of Euro Stoxx / CAC option chains is practically unavailable, hence US chains |
 | Offline study | `arch` bundled S&P 500 (1999–2018) + CBOE VIX via `datasets/finance-vix` | reproducible without Yahoo |
@@ -139,16 +139,18 @@ optimised, but the sub-period table shows the edge is not stable over time.
 
 ```bash
 pip install -r requirements.txt
-pytest -q                          # 26 tests, offline
+pytest -q                          # 30 tests, offline
 python scripts/offline_study.py    # reproduces the results above
-python scripts/check_sources.py    # which series does Yahoo serve today?
-python scripts/daily.py            # history + option snapshots + monitors + docs/index.html
+python scripts/check_sources.py    # which series are available and fresh today?
+python scripts/daily.py            # history + option snapshots (US session only) + monitors + docs/index.html
 streamlit run app.py               # interactive dashboard
 ```
 
-**Automation:** `.github/workflows/daily.yml` runs Monday–Friday at 19:20 UTC (during the
-US session, so option quotes are live), runs the tests, snapshots the chains, rebuilds the
-monitors and commits `data/` and `docs/`. Enable GitHub Pages on `docs/` to publish the
+**Automation:** `.github/workflows/daily.yml` fires Monday–Friday at 15:13, 17:13, 19:13 and
+22:13 UTC. GitHub can start scheduled runs hours late, so `daily.py` snapshots the option
+chains once per day and only while the US session is open (09:45–16:00 New York, when
+quotes are live); every run refreshes history, rebuilds the monitors and commits `data/`
+and `docs/` (push retried on transient GitHub errors). Enable GitHub Pages on `docs/` to publish the
 dashboard.
 
 ```

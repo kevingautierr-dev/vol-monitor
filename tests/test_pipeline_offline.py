@@ -60,7 +60,7 @@ def sandbox(tmp_path, monkeypatch):
 
 
 def test_run_daily_end_to_end(sandbox):
-    pipeline.run_daily()
+    pipeline.run_daily(force_options=True)
     summary = json.loads((C.PROCESSED / "latest.json").read_text())
     assert summary["pairs"]["SPX"]["available"] and summary["pairs"]["SPX"]["term_filter"]
     assert summary["pairs"]["NDX"]["available"]
@@ -75,3 +75,25 @@ def test_run_daily_end_to_end(sandbox):
     # idempotent: same day twice does not duplicate rows
     pipeline.snapshot_all()
     assert len(pd.read_csv(C.IV_SNAPSHOTS)) == len(snaps)
+
+
+def test_options_only_during_us_session(sandbox):
+    ny = D.NY
+    fri = dt.datetime(2026, 11, 6, tzinfo=ny)
+    at = lambda h, m, d=fri: d.replace(hour=h, minute=m)
+    assert not pipeline.options_decision(at(9, 30))[0]                              # pre-open
+    assert pipeline.options_decision(at(14, 20))[0]                                 # in session
+    assert not pipeline.options_decision(at(18, 44))[0]                             # after close
+    assert not pipeline.options_decision(at(14, 20, fri + dt.timedelta(days=1)))[0]  # Saturday
+    for t in C.OPTION_TICKERS:                                                      # once per day
+        (C.CHAINS_DIR / t).mkdir(parents=True, exist_ok=True)
+        (C.CHAINS_DIR / t / "2026-11-06.parquet").touch()
+    take, why = pipeline.options_decision(at(15, 0))
+    assert not take and "already" in why
+
+
+def test_run_daily_skips_options_outside_session(sandbox, monkeypatch):
+    monkeypatch.setattr(pipeline, "options_decision", lambda now=None: (False, "after close"))
+    pipeline.run_daily()
+    assert not C.IV_SNAPSHOTS.exists()
+    assert (C.DOCS / "index.html").exists()

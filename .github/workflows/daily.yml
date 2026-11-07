@@ -2,13 +2,24 @@ name: daily-vol-snapshot
 
 on:
   schedule:
-    # 19:20 UTC Mon-Fri = 15:20 New York in summer, 14:20 in winter:
-    # inside the session, so option bid/ask are live (Yahoo often returns 0/0 quotes after the close).
-    - cron: "20 19 * * 1-5"
+    # GitHub often starts scheduled runs late (15 min to 5 h observed in Oct-Nov 2026),
+    # so the job fires several times and scripts/daily.py decides what to do:
+    # option chains are snapshotted once per day, only while the US session is open
+    # (09:45-16:00 New York); every run refreshes history, monitors and the dashboard.
+    #   15:13 / 17:13 / 19:13 UTC = 10:13 / 12:13 / 14:13 New York in winter (+1 h in summer)
+    #   22:13 UTC = after the close: picks up the day's final bars and the VSTOXX close
+    - cron: "13 15 * * 1-5"
+    - cron: "13 17 * * 1-5"
+    - cron: "13 19 * * 1-5"
+    - cron: "13 22 * * 1-5"
   workflow_dispatch:
     inputs:
       check_sources:
         description: "Also run the source availability check"
+        type: boolean
+        default: false
+      force_options:
+        description: "Snapshot option chains even outside the US session"
         type: boolean
         default: false
 
@@ -41,16 +52,8 @@ jobs:
         if: ${{ inputs.check_sources }}
         run: python scripts/check_sources.py
 
-      - name: Daily run (history, option chains, monitors, dashboard)
-        run: |
-          # Weekend (New York time): Yahoo quotes are stale 0/0, so skip option chains
-          # and only refresh history + monitors + dashboard.
-          if [ "$(TZ=America/New_York date +%u)" -ge 6 ]; then
-            echo "Weekend in New York: running without option chains"
-            python scripts/daily.py --no-options
-          else
-            python scripts/daily.py
-          fi
+      - name: Daily run (history, option chains if session open, monitors, dashboard)
+        run: python scripts/daily.py ${{ inputs.force_options && '--force-options' || '' }}
 
       - name: Commit data and dashboard
         run: |

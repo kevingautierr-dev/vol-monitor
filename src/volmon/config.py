@@ -11,7 +11,7 @@ PROCESSED = DATA / "processed"
 DOCS = ROOT / "docs"                    # static dashboard (GitHub Pages)
 
 # Underlying index -> its 30-day implied vol index. The VSTOXX line is kept only
-# if the source check finds fresh data on Yahoo (see scripts/check_sources.py).
+# if the source check finds fresh data (see scripts/check_sources.py).
 PAIRS = {
     "SPX": {"underlying": "^GSPC", "iv_index": "^VIX", "label": "S&P 500 / VIX"},
     "NDX": {"underlying": "^NDX", "iv_index": "^VXN", "label": "Nasdaq-100 / VXN"},
@@ -20,6 +20,12 @@ PAIRS = {
 
 # VIX term structure (9 days, 30 days, 3 months, 6 months) + vol of vol
 TERM_TICKERS = {"VIX9D": "^VIX9D", "VIX": "^VIX", "VIX3M": "^VIX3M", "VIX6M": "^VIX6M", "VVIX": "^VVIX"}
+
+# Series Yahoo does not serve, read from the index provider's official end-of-day
+# file instead (close only). Yahoo returns 404 for ^V2TX.
+STOXX_FILES = {
+    "^V2TX": "https://www.stoxx.com/document/Indices/Current/HistoricalData/h_v2tx.txt",
+}
 
 EXTRA_TICKERS = {"IRX": "^IRX", "FCHI": "^FCHI"}   # 13-week T-bill (rate), CAC 40 (RV only)
 

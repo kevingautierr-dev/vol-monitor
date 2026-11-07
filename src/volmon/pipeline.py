@@ -108,10 +108,34 @@ def build_all_monitors(min_fresh_days: int = 10) -> dict:
     return summary
 
 
-def run_daily(skip_options: bool = False):
+SESSION_OPEN = dt.time(9, 45)     # leave the opening auction 15 minutes to settle
+SESSION_CLOSE = dt.time(16, 0)
+
+
+def options_decision(now: dt.datetime | None = None) -> tuple[bool, str]:
+    """Snapshot option chains only while the US cash session is open (Yahoo
+    serves stale or 0/0 bid/ask outside it) and only once per day: the cron
+    fires several times because GitHub can delay scheduled runs by hours."""
+    now = now or dt.datetime.now(D.NY)
+    if now.weekday() >= 5:
+        return False, "weekend"
+    if now.time() < SESSION_OPEN:
+        return False, f"before {SESSION_OPEN:%H:%M} New York"
+    if now.time() >= SESSION_CLOSE:
+        return False, f"after {SESSION_CLOSE:%H:%M} New York (session closed)"
+    day = now.date().isoformat()
+    if all((C.CHAINS_DIR / t / f"{day}.parquet").exists() for t in C.OPTION_TICKERS):
+        return False, f"chains already snapshotted for {day}"
+    return True, "US session open"
+
+
+def run_daily(skip_options: bool = False, force_options: bool = False):
     print("1/4 history"); D.refresh_history()
-    if not skip_options:
-        print("2/4 option snapshots"); print(snapshot_all())
+    take, why = (False, "--no-options") if skip_options else (True, "forced") if force_options else options_decision()
+    if take:
+        print(f"2/4 option snapshots ({why})"); print(snapshot_all())
+    else:
+        print(f"2/4 option snapshots skipped: {why}")
     print("3/4 monitors"); summary = build_all_monitors()
     print(json.dumps(summary, indent=2, default=str))
     print("4/4 dashboard")

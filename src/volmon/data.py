@@ -3,6 +3,8 @@ and the source-availability check that decides whether Europe is covered."""
 from __future__ import annotations
 
 import datetime as dt
+import io
+import urllib.request
 from zoneinfo import ZoneInfo
 
 import numpy as np
@@ -21,7 +23,28 @@ def _yf():
 # --------------------------------------------------------------------------- #
 # Daily history
 # --------------------------------------------------------------------------- #
+def parse_stoxx_txt(text: str) -> pd.DataFrame:
+    """STOXX end-of-day file: ``Date;Symbol;Indexvalue`` with dd.mm.yyyy dates.
+    Close only, so Open/High/Low are set to the close (fine for an IV index:
+    only the close is used)."""
+    f = pd.read_csv(io.StringIO(text), sep=";")
+    f.columns = [c.strip() for c in f.columns]
+    idx = pd.to_datetime(f["Date"].str.strip(), format="%d.%m.%Y")
+    close = pd.to_numeric(f["Indexvalue"], errors="coerce").to_numpy()
+    h = pd.DataFrame({"Open": close, "High": close, "Low": close, "Close": close}, index=idx)
+    h = h[~h.index.duplicated(keep="last")].dropna().sort_index()
+    return h[h["Close"] > 0]
+
+
+def fetch_stoxx(url: str) -> pd.DataFrame:
+    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (vol-monitor)"})
+    with urllib.request.urlopen(req, timeout=60) as r:
+        return parse_stoxx_txt(r.read().decode("utf-8-sig"))
+
+
 def fetch_history(ticker: str, period: str = "max") -> pd.DataFrame:
+    if ticker in C.STOXX_FILES:
+        return fetch_stoxx(C.STOXX_FILES[ticker])
     h = _yf().Ticker(ticker).history(period=period, auto_adjust=False, actions=False)
     if h.empty:
         return h
