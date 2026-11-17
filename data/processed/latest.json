@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-11-17T02:27+00:00",
+  "generated_utc": "2026-11-17T04:29+00:00",
   "pairs": {
     "SPX": {
       "available": true,
@@ -52,15 +52,15 @@
       "rv_col": "yz_21",
       "term_filter": false,
       "latest": {
-        "date": "2026-11-13",
-        "iv": 17.11,
-        "rv": 12.92,
+        "date": "2026-11-16",
+        "iv": 18.32,
+        "rv": 12.86,
         "rv_estimator": "yz_21",
-        "spread_vol_pts": 4.19,
-        "ratio": 1.32,
-        "spread_z": -0.76,
-        "iv_rank_1y": 14.8,
-        "iv_pct_1y": 28.2,
+        "spread_vol_pts": 5.46,
+        "ratio": 1.42,
+        "spread_z": -0.32,
+        "iv_rank_1y": 20.6,
+        "iv_pct_1y": 46.4,
         "signal": 0,
         "signal_label": "Neutre",
         "term_filter": false
