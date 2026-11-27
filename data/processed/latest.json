@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-11-27T04:16+00:00",
+  "generated_utc": "2026-11-27T23:28+00:00",
   "pairs": {
     "SPX": {
       "available": true,
@@ -8,20 +8,20 @@
       "rv_col": "cc_21",
       "term_filter": true,
       "latest": {
-        "date": "2026-11-25",
-        "iv": 28.29,
-        "rv": 30.99,
+        "date": "2026-11-27",
+        "iv": 23.81,
+        "rv": 31.65,
         "rv_estimator": "cc_21",
-        "spread_vol_pts": -2.7,
-        "ratio": 0.91,
-        "spread_z": -2.08,
-        "iv_rank_1y": 66.1,
-        "iv_pct_1y": 98.0,
-        "signal": -1,
-        "signal_label": "Vol bon march\u00e9",
+        "spread_vol_pts": -7.84,
+        "ratio": 0.75,
+        "spread_z": -3.35,
+        "iv_rank_1y": 46.1,
+        "iv_pct_1y": 88.5,
+        "signal": 0,
+        "signal_label": "Neutre",
         "term_filter": true,
-        "ts_slope_vol_pts": -2.0,
-        "curve": "backwardation"
+        "ts_slope_vol_pts": 0.01,
+        "curve": "contango"
       }
     },
     "NDX": {
