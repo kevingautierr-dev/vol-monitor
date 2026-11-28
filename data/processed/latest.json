@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-11-28T01:56+00:00",
+  "generated_utc": "2026-11-28T03:55+00:00",
   "pairs": {
     "SPX": {
       "available": true,
@@ -31,15 +31,15 @@
       "rv_col": "cc_21",
       "term_filter": false,
       "latest": {
-        "date": "2026-11-25",
-        "iv": 38.53,
-        "rv": 45.99,
+        "date": "2026-11-27",
+        "iv": 33.34,
+        "rv": 47.16,
         "rv_estimator": "cc_21",
-        "spread_vol_pts": -7.46,
-        "ratio": 0.84,
-        "spread_z": -2.43,
-        "iv_rank_1y": 76.0,
-        "iv_pct_1y": 99.6,
+        "spread_vol_pts": -13.82,
+        "ratio": 0.71,
+        "spread_z": -3.64,
+        "iv_rank_1y": 57.5,
+        "iv_pct_1y": 96.4,
         "signal": -1,
         "signal_label": "Vol bon march\u00e9",
         "term_filter": false
@@ -52,17 +52,17 @@
       "rv_col": "yz_21",
       "term_filter": false,
       "latest": {
-        "date": "2026-11-26",
-        "iv": 24.0,
-        "rv": 14.39,
+        "date": "2026-11-27",
+        "iv": 22.29,
+        "rv": 14.33,
         "rv_estimator": "yz_21",
-        "spread_vol_pts": 9.6,
-        "ratio": 1.67,
-        "spread_z": 1.07,
-        "iv_rank_1y": 48.0,
-        "iv_pct_1y": 88.1,
-        "signal": 1,
-        "signal_label": "Vol ch\u00e8re",
+        "spread_vol_pts": 7.96,
+        "ratio": 1.55,
+        "spread_z": 0.51,
+        "iv_rank_1y": 39.8,
+        "iv_pct_1y": 79.8,
+        "signal": 0,
+        "signal_label": "Neutre",
         "term_filter": false
       }
     }
